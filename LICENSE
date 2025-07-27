@@ -1,0 +1,62 @@
+MIT License
+
+Copyright (c) 2025 Chuck McCullough
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Educational Use Notice
+
+This repository contains educational materials for teaching secure programming 
+practices. Some materials include intentionally vulnerable code examples and 
+applications designed for educational purposes only.
+
+### Important Disclaimers:
+
+1. **Educational Purpose Only**: All vulnerable code examples and applications 
+   are provided solely for educational and training purposes.
+
+2. **Authorized Use Only**: These materials should only be used in authorized 
+   educational environments with proper supervision and consent.
+
+3. **No Malicious Use**: Users are expressly prohibited from using these 
+   materials for any malicious, illegal, or unauthorized purposes.
+
+4. **Security Responsibility**: Users are responsible for ensuring that 
+   vulnerable applications and code examples are used only in isolated, 
+   secure environments and never deployed to production systems.
+
+5. **No Warranty**: The authors provide no warranty regarding the security 
+   or functionality of any code examples, and users assume all responsibility 
+   for their use.
+
+6. **Compliance**: Users must comply with all applicable laws, regulations, 
+   and institutional policies when using these materials.
+
+### Responsible Disclosure
+
+If you discover actual security vulnerabilities in non-educational components 
+of this repository, please report them responsibly through appropriate channels 
+rather than disclosing them publicly.
+
+### Attribution
+
+When using or adapting these materials, please provide appropriate attribution 
+to the original authors and maintain these license terms and disclaimers.
