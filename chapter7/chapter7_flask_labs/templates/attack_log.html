@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attack Detection Log</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🚨 Live Attack Detection Log</h1>
+            <p>Server-Side Detection of Client-Side Tampering Attempts</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navigation">
+            <a href="{{ url_for('index') }}" class="btn">← Back to Labs</a>
+            <a href="{{ url_for('lab1_banking') }}" class="btn">Lab 1</a>
+            <a href="{{ url_for('lab2_ecommerce') }}" class="btn">Lab 2</a>
+            <a href="{{ url_for('lab3_session') }}" class="btn">Lab 3</a>
+        </div>
+
+        <div class="attack-log">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2>🔍 Detected Attacks</h2>
+                <form method="POST" action="{{ url_for('clear_attack_log') }}" style="display: inline;">
+                    <button type="submit" class="btn btn-warning">Clear Log</button>
+                </form>
+            </div>
+            
+            {% if attacks %}
+                <p>This log shows all client-side tampering attempts detected by the server. 
+                   Each entry represents a security violation that would be blocked in a real application.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Attack Type</th>
+                            <th>Details</th>
+                            <th>Severity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attack in attacks %}
+                        <tr>
+                            <td>{{ attack.timestamp }}</td>
+                            <td>
+                                <span style="font-weight: bold; color: #dc3545;">
+                                    {{ attack.type }}
+                                </span>
+                            </td>
+                            <td>{{ attack.details }}</td>
+                            <td>
+                                {% if 'Price' in attack.type or 'Credit' in attack.type %}
+                                    <span style="color: #dc3545; font-weight: bold;">🔴 HIGH</span>
+                                {% elif 'Privilege' in attack.type or 'Admin' in attack.type %}
+                                    <span style="color: #fd7e14; font-weight: bold;">🟠 CRITICAL</span>
+                                {% else %}
+                                    <span style="color: #ffc107; font-weight: bold;">🟡 MEDIUM</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div style="margin-top: 2rem; padding: 1.5rem; background-color: #d1ecf1; border-radius: 8px;">
+                    <h3 style="color: #0c5460; margin-bottom: 1rem;">📊 Attack Summary</h3>
+                    <p><strong>Total Attacks Detected:</strong> {{ attacks|length }}</p>
+                    <p><strong>Most Recent:</strong> {{ attacks[-1].timestamp if attacks else 'None' }}</p>
+                    <p><strong>Common Attack Types:</strong> 
+                        {% set attack_types = attacks|map(attribute='type')|list %}
+                        {% for type in attack_types|unique %}
+                            {{ type }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+                
+            {% else %}
+                <div style="text-align: center; padding: 3rem; background-color: #f8f9fa; border-radius: 8px;">
+                    <h3 style="color: #666; margin-bottom: 1rem;">No attacks detected yet</h3>
+                    <p style="color: #666; margin-bottom: 2rem;">
+                        Complete the labs to see how the server detects client-side tampering attempts.
+                        Each time you manipulate form data, hidden fields, or session variables, 
+                        the server will log the attack here.
+                    </p>
+                    <a href="{{ url_for('lab1_banking') }}" class="btn btn-danger">Start Lab 1</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Educational Information -->
+        <div class="form-container">
+            <h2>🎓 Understanding Server-Side Detection</h2>
+            <p>This attack log demonstrates how properly implemented server-side validation can detect client-side tampering:</p>
+            
+            <h3>🔍 Detection Methods Used:</h3>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li><strong>Price Validation:</strong> Server compares client-sent prices with database prices</li>
+                <li><strong>Role Verification:</strong> Server validates user roles against session database</li>
+                <li><strong>Range Checking:</strong> Server enforces business logic limits (transfer amounts, etc.)</li>
+                <li><strong>Integrity Checks:</strong> Server validates that form data hasn't been tampered with</li>
+                <li><strong>Session Validation:</strong> Server maintains authoritative session state</li>
+            </ul>
+            
+            <h3>🛡️ Real-World Implementation:</h3>
+            <div class="console-commands">
+                <h4>Server-Side Validation Example:</h4>
+                <code>// Validate transfer amount on server
+if ($_POST['amount'] > $user_daily_limit) {
+    log_security_event('Transfer limit exceeded', $user_id, $_POST['amount']);
+    return ['error' => 'Transfer denied'];
+}</code>
+                
+                <code>// Validate product prices on server
+$server_price = get_product_price($product_id);
+if (abs($_POST['price'] - $server_price) > 0.01) {
+    log_security_event('Price tampering detected', $user_id, $_POST['price']);
+    return ['error' => 'Invalid price'];
+}</code>
+            </div>
+        </div>
+
+        <!-- Best Practices -->
+        <div class="form-container">
+            <h2>✅ Security Best Practices</h2>
+            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                <li><strong>Never trust client input:</strong> Always validate and sanitize data on the server</li>
+                <li><strong>Store sensitive data server-side:</strong> Prices, roles, permissions belong in databases</li>
+                <li><strong>Use server-side sessions:</strong> Don't store authentication state in client storage</li>
+                <li><strong>Implement logging:</strong> Track and alert on suspicious client behavior</li>
+                <li><strong>Rate limiting:</strong> Prevent rapid-fire attack attempts</li>
+                <li><strong>Input validation:</strong> Check ranges, types, and business logic constraints</li>
+                <li><strong>Principle of least privilege:</strong> Grant minimum necessary permissions</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Chapter 7 Client-Side Security Labs - Attack Detection System</p>
+        <p>Educational demonstration of proper server-side validation</p>
+    </div>
+</body>
+</html>

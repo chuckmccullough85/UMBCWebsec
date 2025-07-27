@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2: Hidden Field Manipulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🛒 Lab 2: Hidden Field Manipulation</h1>
+            <p>E-Commerce Checkout with "Secure" Hidden Price Fields</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navigation">
+            <a href="{{ url_for('lab1_banking') }}" class="btn">← Lab 1</a>
+            <a href="{{ url_for('index') }}" class="btn">Back to Labs</a>
+            <a href="{{ url_for('lab3_session') }}" class="btn">Next: Lab 3 →</a>
+            <a href="{{ url_for('view_attack_log') }}" class="btn btn-warning">View Attack Log</a>
+        </div>
+
+        <div class="warning-banner">
+            <strong>🎯 Objective:</strong> Manipulate hidden form fields to change product prices, user roles, and discount levels.
+        </div>
+
+        <!-- User Info Panel -->
+        <div class="form-container">
+            <h3>👤 Current User Profile</h3>
+            <div style="background-color: #e3f2fd; padding: 1rem; border-radius: 8px;">
+                <strong>User Type:</strong> <span id="userDisplay">Regular Customer</span><br>
+                <strong>Discount Level:</strong> <span id="discountDisplay">0%</span><br>
+                <strong>VIP Status:</strong> <span id="vipDisplay">No</span>
+            </div>
+        </div>
+
+        <!-- E-Commerce Form -->
+        <div class="form-container">
+            <h2>🛍️ SecureShop Checkout System</h2>
+            <p><em>Our prices are securely stored in hidden fields that users can't see or modify...</em></p>
+            
+            <form id="checkoutForm">
+                <!-- Hidden fields that control pricing and user privileges -->
+                <input type="hidden" id="userRole" name="userRole" value="customer">
+                <input type="hidden" id="discountPercent" name="discountPercent" value="0">
+                <input type="hidden" id="isVip" name="isVip" value="false">
+                
+                <!-- Product 1: Laptop -->
+                <div style="border: 2px solid #ddd; padding: 1.5rem; margin: 1rem 0; border-radius: 8px; background: white;">
+                    <h4>💻 Premium Laptop</h4>
+                    <div style="font-size: 1.5rem; color: #28a745; font-weight: bold;">
+                        ${{ products.laptop.price }}
+                    </div>
+                    <input type="hidden" id="laptop_price" name="laptop_price" value="{{ products.laptop.price }}">
+                    
+                    <div style="margin: 1rem 0;">
+                        <label for="laptop_qty">Quantity:</label>
+                        <input type="number" id="laptop_qty" name="laptop_qty" value="1" min="0" max="5" 
+                               style="width: 80px; margin-left: 10px;" onchange="updateTotal()">
+                    </div>
+                </div>
+                
+                <!-- Product 2: Headphones -->
+                <div style="border: 2px solid #ddd; padding: 1.5rem; margin: 1rem 0; border-radius: 8px; background: white;">
+                    <h4>🎧 Wireless Headphones</h4>
+                    <div style="font-size: 1.5rem; color: #28a745; font-weight: bold;">
+                        ${{ products.headphones.price }}
+                    </div>
+                    <input type="hidden" id="headphones_price" name="headphones_price" value="{{ products.headphones.price }}">
+                    
+                    <div style="margin: 1rem 0;">
+                        <label for="headphones_qty">Quantity:</label>
+                        <input type="number" id="headphones_qty" name="headphones_qty" value="1" min="0" max="10" 
+                               style="width: 80px; margin-left: 10px;" onchange="updateTotal()">
+                    </div>
+                </div>
+                
+                <!-- Order Summary -->
+                <div style="background-color: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                    <h3>📋 Order Summary</h3>
+                    <div style="font-size: 1.1rem; line-height: 1.6;">
+                        <div>Subtotal: $<span id="subtotal">1499.98</span></div>
+                        <div>Discount (<span id="discountPercDisplay">0</span>%): -$<span id="discount">0.00</span></div>
+                        <div>Tax (8%): $<span id="tax">119.99</span></div>
+                        <div style="font-size: 1.3rem; font-weight: bold; border-top: 2px solid #333; padding-top: 0.5rem; margin-top: 0.5rem;">
+                            Total: $<span id="total">1619.97</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-success">💳 Complete Purchase</button>
+            </form>
+        </div>
+
+        <!-- Attack Panel -->
+        <div class="attack-panel">
+            <h3>🔓 Attack Techniques</h3>
+            <p>These attacks manipulate the "hidden" pricing and user data:</p>
+            
+            <div class="attack-buttons">
+                <button onclick="makeMeVip()" class="btn btn-danger">Become VIP (20% off!)</button>
+                <button onclick="changePrices()" class="btn btn-danger">Slash Prices by 90%</button>
+                <button onclick="becomeAdmin()" class="btn btn-danger">Escalate to Admin</button>
+                <button onclick="freeProducts()" class="btn btn-danger">Make Everything $0.01</button>
+            </div>
+
+            <div class="console-commands">
+                <h4>🖥️ Manual Attack Commands (Try in Browser Console):</h4>
+                <code>document.getElementById('laptop_price').value = '1.00';</code>
+                <code>document.getElementById('userRole').value = 'admin';</code>
+                <code>document.getElementById('discountPercent').value = '99';</code>
+                <code>document.getElementById('isVip').value = 'true'; updateUserDisplay();</code>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="form-container">
+            <h2>🔍 Your Mission</h2>
+            <ol>
+                <li><strong>Discover the hidden fields:</strong>
+                    <ul>
+                        <li>Open Developer Tools (F12) → Elements tab</li>
+                        <li>Search for <code>type="hidden"</code> (Ctrl+F)</li>
+                        <li>Notice: userRole, discountPercent, isVip, laptop_price, headphones_price</li>
+                    </ul>
+                </li>
+                <li><strong>Attack the pricing:</strong>
+                    <ul>
+                        <li>Find <code>value="{{ products.laptop.price }}"</code></li>
+                        <li>Double-click the value and change to <code>value="1.00"</code></li>
+                        <li>Watch the total update automatically!</li>
+                    </ul>
+                </li>
+                <li><strong>Escalate your privileges:</strong>
+                    <ul>
+                        <li>Change <code>value="customer"</code> to <code>value="admin"</code></li>
+                        <li>Change <code>value="false"</code> to <code>value="true"</code> for VIP status</li>
+                        <li>Set discount to 99% by changing <code>value="0"</code> to <code>value="99"</code></li>
+                    </ul>
+                </li>
+                <li><strong>Complete the purchase and see server detection!</strong></li>
+            </ol>
+        </div>
+
+        <!-- Real-World Examples -->
+        <div class="form-container">
+            <h2>💰 Real-World Attacks</h2>
+            <ul>
+                <li><strong>2018:</strong> Major airline allowed $0 ticket prices via hidden field manipulation</li>
+                <li><strong>2019:</strong> E-commerce giant lost millions when users changed product prices</li>
+                <li><strong>2020:</strong> Gaming platform suffered currency duplication via hidden balance fields</li>
+                <li><strong>2021:</strong> Subscription service privilege escalation through role field tampering</li>
+            </ul>
+            
+            <h3>🛡️ The Secure Solution</h3>
+            <div class="console-commands">
+                <h4>❌ Wrong:</h4>
+                <code>$total = $_POST['laptop_price'] + $_POST['headphones_price'];</code>
+                
+                <h4>✅ Correct:</h4>
+                <code>$prices = ['laptop' => 1299.99, 'headphones' => 199.99];<br>$total = $qty_laptop * $prices['laptop'] + $qty_headphones * $prices['headphones'];</code>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div id="resultPanel" class="result-panel">
+            <!-- Results will appear here -->
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/lab2.js') }}"></script>
+</body>
+</html>

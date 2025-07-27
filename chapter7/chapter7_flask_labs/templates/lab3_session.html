@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 3: Session Management Attacks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🔑 Lab 3: Session Management Attacks</h1>
+            <p>Web Application with Client-Side Session Management</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navigation">
+            <a href="{{ url_for('lab2_ecommerce') }}" class="btn">← Lab 2</a>
+            <a href="{{ url_for('index') }}" class="btn">Back to Labs</a>
+            <a href="{{ url_for('view_attack_log') }}" class="btn btn-warning">View Attack Log</a>
+        </div>
+
+        <div class="warning-banner">
+            <strong>🎯 Objective:</strong> Manipulate JavaScript variables and browser storage to escalate privileges and bypass access controls.
+        </div>
+
+        <!-- Session Info Panel -->
+        <div class="form-container">
+            <h3>🔐 Current Session Information</h3>
+            <div style="background-color: #e3f2fd; padding: 1rem; border-radius: 8px; font-family: monospace;">
+                <strong>Username:</strong> <span id="currentUser">guest_user</span><br>
+                <strong>Role:</strong> <span id="currentRole">user</span><br>
+                <strong>Access Level:</strong> <span id="accessLevel">1</span><br>
+                <strong>Credits:</strong> <span id="userCredits">100</span><br>
+                <strong>Session Token:</strong> <span id="sessionToken">user_abc123xyz</span>
+            </div>
+        </div>
+
+        <!-- Application Features -->
+        <div class="form-container">
+            <h3>🏠 User Features</h3>
+            <div style="margin: 1rem 0;">
+                <button onclick="performAction('view_profile')" class="btn">View Profile</button>
+                <button onclick="performAction('download_free')" class="btn">Download Free Content</button>
+                <button onclick="performAction('purchase_credits')" class="btn">Purchase Credits ($10)</button>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h3>💳 Premium Features (Requires 50+ Credits)</h3>
+            <div style="margin: 1rem 0;">
+                <button onclick="performAction('premium_content')" class="btn btn-warning">Access Premium Content</button>
+                <button onclick="performAction('premium_download')" class="btn btn-warning">Download Premium Files</button>
+            </div>
+        </div>
+
+        <div class="form-container" id="adminPanel" style="display: none;">
+            <h3>⚡ Admin Features (Admin Only)</h3>
+            <div style="margin: 1rem 0;">
+                <button onclick="performAction('admin_action')" class="btn btn-danger">View All Users</button>
+                <button onclick="performAction('delete_user')" class="btn btn-danger">Delete User Account</button>
+                <button onclick="performAction('view_logs')" class="btn btn-danger">View System Logs</button>
+                <button onclick="performAction('modify_database')" class="btn btn-danger">Modify Database</button>
+            </div>
+        </div>
+
+        <!-- Browser Storage Display -->
+        <div class="form-container">
+            <h3>💾 Browser Storage Contents</h3>
+            <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.9rem; max-height: 300px; overflow-y: auto;">
+                <div id="storageDisplay">Loading storage contents...</div>
+            </div>
+        </div>
+
+        <!-- Attack Panel -->
+        <div class="attack-panel">
+            <h3>🔓 Session Attack Techniques</h3>
+            <p>These attacks manipulate client-side session data and JavaScript variables:</p>
+            
+            <div class="attack-buttons">
+                <button onclick="becomeAdmin()" class="btn btn-danger">Escalate to Admin</button>
+                <button onclick="addCredits()" class="btn btn-danger">Add 9999 Credits</button>
+                <button onclick="stealSession()" class="btn btn-danger">Steal Session Data</button>
+                <button onclick="manipulateStorage()" class="btn btn-danger">Tamper with Storage</button>
+                <button onclick="bypassAccessControl()" class="btn btn-danger">Bypass All Controls</button>
+            </div>
+
+            <div class="console-commands">
+                <h4>🖥️ Manual Attack Commands (Try in Browser Console):</h4>
+                <code>currentUser.role = "admin"; updateDisplay();</code>
+                <code>currentUser.credits = 999999; updateDisplay();</code>
+                <code>localStorage.setItem('authToken', 'admin_hacked_token');</code>
+                <code>sessionData.accessLevel = 99; updateDisplay();</code>
+                <code>console.log(localStorage); console.log(sessionStorage);</code>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="form-container">
+            <h2>🔍 Your Mission</h2>
+            <ol>
+                <li><strong>Reconnaissance Phase:</strong>
+                    <ul>
+                        <li>Open Developer Tools (F12) → Console tab</li>
+                        <li>Type <code>currentUser</code> and press Enter</li>
+                        <li>Type <code>sessionData</code> to see session variables</li>
+                        <li>Type <code>localStorage</code> and <code>sessionStorage</code></li>
+                    </ul>
+                </li>
+                <li><strong>Privilege Escalation:</strong>
+                    <ul>
+                        <li>Change your role: <code>currentUser.role = "admin"</code></li>
+                        <li>Update display: <code>updateDisplay()</code></li>
+                        <li>Notice the admin panel appears!</li>
+                    </ul>
+                </li>
+                <li><strong>Credit Manipulation:</strong>
+                    <ul>
+                        <li>Add credits: <code>currentUser.credits = 999999</code></li>
+                        <li>Try accessing premium features</li>
+                    </ul>
+                </li>
+                <li><strong>Storage Manipulation:</strong>
+                    <ul>
+                        <li>Modify localStorage: <code>localStorage.setItem('role', 'superadmin')</code></li>
+                        <li>Change session data: <code>sessionStorage.setItem('accessLevel', '999')</code></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Real-World Impact -->
+        <div class="form-container">
+            <h2>🌍 Real-World Session Attacks</h2>
+            <ul>
+                <li><strong>XSS + Session Theft:</strong> Malicious scripts steal authentication tokens from localStorage</li>
+                <li><strong>Browser Extension Attacks:</strong> Malicious extensions read all browser storage</li>
+                <li><strong>MITM + Storage Manipulation:</strong> Network attackers inject JavaScript to modify session data</li>
+                <li><strong>Social Engineering:</strong> Trick users into running malicious console commands</li>
+            </ul>
+            
+            <h3>🛡️ Secure Session Management</h3>
+            <div class="console-commands">
+                <h4>❌ Wrong (Client-side):</h4>
+                <code>if (localStorage.getItem('role') === 'admin') allowAccess();</code>
+                
+                <h4>✅ Correct (Server-side):</h4>
+                <code>if (validateServerSession(token) && user.role === 'admin') allowAccess();</code>
+            </div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="form-container">
+            <h3>🖥️ Application Console</h3>
+            <div style="background-color: #2d3748; color: #68d391; padding: 1rem; border-radius: 8px; font-family: monospace; min-height: 150px; max-height: 300px; overflow-y: auto;">
+                <div id="consoleLog">SecureApp v2.1 initialized. Session management active.</div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div id="resultPanel" class="result-panel">
+            <!-- Results will appear here -->
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/lab3.js') }}"></script>
+</body>
+</html>

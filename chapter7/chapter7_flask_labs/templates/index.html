@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 7: Client-Side Security Labs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🔐 Chapter 7: Client-Side Security Labs</h1>
+            <p>Interactive demonstrations of why "Never Trust the Client"</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="warning-banner">
+            <strong>⚠️ Educational Warning:</strong> These labs demonstrate real security vulnerabilities for educational purposes only. 
+            Never attempt these techniques on systems you don't own or without explicit permission.
+        </div>
+
+        <div class="lab-grid">
+            <!-- Lab 1: Client-Side Validation Bypass -->
+            <div class="lab-card">
+                <h3>🏦 Lab 1: Client-Side Validation Bypass</h3>
+                <p>Learn how client-side form validation provides zero security by bypassing a "secure" banking transfer form.</p>
+                
+                <div class="vulnerability-list">
+                    <strong>Vulnerabilities Demonstrated:</strong>
+                    <ul>
+                        <li>HTML attribute manipulation</li>
+                        <li>JavaScript validation bypass</li>
+                        <li>DOM tampering techniques</li>
+                        <li>Browser developer tools exploitation</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Scenario:</strong> A banking application relies on client-side validation to prevent transfers over $1000.</p>
+                
+                <a href="{{ url_for('lab1_banking') }}" class="btn btn-danger">Start Lab 1</a>
+            </div>
+
+            <!-- Lab 2: Hidden Field Manipulation -->
+            <div class="lab-card">
+                <h3>🛒 Lab 2: Hidden Field Manipulation</h3>
+                <p>Discover how "hidden" form fields are completely visible and modifiable, allowing price and privilege manipulation.</p>
+                
+                <div class="vulnerability-list">
+                    <strong>Vulnerabilities Demonstrated:</strong>
+                    <ul>
+                        <li>Hidden field price tampering</li>
+                        <li>User role escalation</li>
+                        <li>Discount manipulation</li>
+                        <li>Business logic bypass</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Scenario:</strong> An e-commerce site stores product prices and user roles in hidden form fields.</p>
+                
+                <a href="{{ url_for('lab2_ecommerce') }}" class="btn btn-danger">Start Lab 2</a>
+            </div>
+
+            <!-- Lab 3: Session Management Attacks -->
+            <div class="lab-card">
+                <h3>🔑 Lab 3: Session Management Attacks</h3>
+                <p>Explore how client-side session management leads to privilege escalation and complete security bypass.</p>
+                
+                <div class="vulnerability-list">
+                    <strong>Vulnerabilities Demonstrated:</strong>
+                    <ul>
+                        <li>JavaScript variable manipulation</li>
+                        <li>localStorage/sessionStorage abuse</li>
+                        <li>Privilege escalation attacks</li>
+                        <li>Session token manipulation</li>
+                    </ul>
+                </div>
+                
+                <p><strong>Scenario:</strong> A web application manages user sessions and permissions entirely on the client-side.</p>
+                
+                <a href="{{ url_for('lab3_session') }}" class="btn btn-danger">Start Lab 3</a>
+            </div>
+        </div>
+
+        <!-- Attack Log Section -->
+        <div class="form-container">
+            <h2>🚨 Live Attack Detection</h2>
+            <p>This Flask application includes server-side detection of client-side tampering attempts. 
+               As you complete the labs, the server will detect and log your attacks, demonstrating how 
+               proper server-side validation can identify malicious behavior.</p>
+            
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="{{ url_for('view_attack_log') }}" class="btn btn-warning">View Attack Log</a>
+            </div>
+        </div>
+
+        <!-- Key Learning Objectives -->
+        <div class="form-container">
+            <h2>🎯 Learning Objectives</h2>
+            <p>After completing these labs, you will understand:</p>
+            <ul style="margin-left: 2rem; margin-top: 1rem;">
+                <li><strong>Why client-side security is fundamentally flawed</strong> - Users control their browsers completely</li>
+                <li><strong>Common attack techniques</strong> - DOM manipulation, hidden field tampering, JavaScript injection</li>
+                <li><strong>Real-world impact</strong> - How these vulnerabilities lead to financial fraud and data breaches</li>
+                <li><strong>Proper security architecture</strong> - Server-side validation and the principle of "Never Trust the Client"</li>
+            </ul>
+        </div>
+
+        <!-- Instructions -->
+        <div class="form-container">
+            <h2>🔧 How to Use These Labs</h2>
+            <ol style="margin-left: 2rem; margin-top: 1rem;">
+                <li><strong>Complete each lab in order</strong> - They build upon each other in complexity</li>
+                <li><strong>Use browser developer tools</strong> - Press F12 to open DevTools in any browser</li>
+                <li><strong>Try manual attacks first</strong> - Learn to manipulate HTML and JavaScript yourself</li>
+                <li><strong>Use the automated attack buttons</strong> - See common exploitation patterns</li>
+                <li><strong>Check the attack log</strong> - See how the server detects your attempts</li>
+                <li><strong>Read the educational notes</strong> - Understand the security principles behind each attack</li>
+            </ol>
+        </div>
+
+        <!-- Real-World Examples -->
+        <div class="form-container">
+            <h2>💰 Real-World Impact</h2>
+            <p>These aren't just academic exercises. Client-side security failures have caused:</p>
+            <ul style="margin-left: 2rem; margin-top: 1rem; color: #dc3545;">
+                <li><strong>2019:</strong> Major e-commerce platform lost $2M due to client-side price validation</li>
+                <li><strong>2020:</strong> Banking application allowed unlimited transfers via DOM manipulation</li>
+                <li><strong>2021:</strong> Gaming platform lost $500K to client-side currency manipulation</li>
+                <li><strong>2022:</strong> Airline company allowed $0 ticket purchases through hidden field tampering</li>
+                <li><strong>2023:</strong> SaaS application suffered privilege escalation via client-side role management</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Chapter 7 Client-Side Security Labs | Educational Use Only</p>
+        <p><a href="https://owasp.org/www-community/attacks/">OWASP Client-Side Security Guide</a> | 
+           <a href="https://developer.mozilla.org/en-US/docs/Web/Security">MDN Web Security</a></p>
+    </div>
+</body>
+</html>

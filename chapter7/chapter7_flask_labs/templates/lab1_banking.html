@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 1: Client-Side Validation Bypass</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🏦 Lab 1: Client-Side Validation Bypass</h1>
+            <p>Banking Transfer System with "Secure" Client-Side Validation</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="navigation">
+            <a href="{{ url_for('index') }}" class="btn">← Back to Labs</a>
+            <a href="{{ url_for('lab2_ecommerce') }}" class="btn">Next: Lab 2 →</a>
+            <a href="{{ url_for('view_attack_log') }}" class="btn btn-warning">View Attack Log</a>
+        </div>
+
+        <div class="warning-banner">
+            <strong>🎯 Objective:</strong> Bypass the $1000 transfer limit and 50-character memo restriction using browser developer tools.
+        </div>
+
+        <!-- Banking Form -->
+        <div class="form-container">
+            <h2>💳 SecureBank Transfer System</h2>
+            <p><em>This form has "bulletproof" client-side validation to prevent fraud...</em></p>
+            
+            <form id="transferForm">
+                <div class="form-group">
+                    <label for="fromAccount">From Account:</label>
+                    <select id="fromAccount" required>
+                        <option value="">Select Account</option>
+                        <option value="checking">Checking Account ($5,000)</option>
+                        <option value="savings">Savings Account ($15,000)</option>
+                        <option value="business">Business Account ($50,000)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="toAccount">To Account Number:</label>
+                    <input type="text" id="toAccount" placeholder="Enter recipient account number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">Transfer Amount ($):</label>
+                    <input type="number" id="amount" max="1000" min="1" step="0.01" required>
+                    <div class="error-message" id="amountError"></div>
+                    <small style="color: #666;">Maximum transfer: $1000 for security</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="memo">Memo (Optional):</label>
+                    <input type="text" id="memo" maxlength="50" placeholder="Transaction memo">
+                    <div class="error-message" id="memoError"></div>
+                    <small style="color: #666;">Maximum 50 characters</small>
+                </div>
+                
+                <button type="submit" class="btn btn-success">🔒 Secure Transfer</button>
+            </form>
+        </div>
+
+        <!-- Attack Panel -->
+        <div class="attack-panel">
+            <h3>🔓 Attack Techniques (Try These!)</h3>
+            <p>These buttons demonstrate common client-side bypass methods:</p>
+            
+            <div class="attack-buttons">
+                <button onclick="bypassMaxAmount()" class="btn btn-danger">Bypass $1000 Limit</button>
+                <button onclick="bypassLengthLimit()" class="btn btn-danger">Bypass Memo Length</button>
+                <button onclick="manipulateDOM()" class="btn btn-danger">Complete DOM Bypass</button>
+                <button onclick="removeValidation()" class="btn btn-danger">Disable All Validation</button>
+            </div>
+
+            <div class="console-commands">
+                <h4>🖥️ Manual Attack Commands (Try in Browser Console):</h4>
+                <code>document.getElementById('amount').max = '999999';</code>
+                <code>document.getElementById('amount').value = '50000';</code>
+                <code>document.getElementById('memo').removeAttribute('maxlength');</code>
+                <code>document.getElementById('transferForm').onsubmit = null;</code>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="form-container">
+            <h2>🔍 Your Mission</h2>
+            <ol>
+                <li><strong>Try the "secure" form first:</strong>
+                    <ul>
+                        <li>Attempt to transfer more than $1000 - you'll get an error!</li>
+                        <li>Try entering a memo longer than 50 characters - blocked!</li>
+                    </ul>
+                </li>
+                <li><strong>Open Developer Tools (F12):</strong>
+                    <ul>
+                        <li>Go to the "Elements" tab</li>
+                        <li>Find the amount input field</li>
+                        <li>Notice the <code>max="1000"</code> attribute</li>
+                    </ul>
+                </li>
+                <li><strong>Attack the form:</strong>
+                    <ul>
+                        <li>Use the red attack buttons above</li>
+                        <li>Or manually: double-click <code>max="1000"</code> and change to <code>max="999999"</code></li>
+                        <li>Try transferring $50,000!</li>
+                    </ul>
+                </li>
+                <li><strong>Understand the lesson:</strong>
+                    <ul>
+                        <li>Client-side validation = User experience only</li>
+                        <li>Users control their browsers completely</li>
+                        <li><strong>NEVER trust data from the client!</strong></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <!-- Real-World Impact -->
+        <div class="form-container">
+            <h2>🚨 Real-World Impact</h2>
+            <ul>
+                <li><strong>2020:</strong> Regional bank allowed unlimited transfers when users bypassed client-side limits</li>
+                <li><strong>2021:</strong> Fintech startup lost $1.2M to DOM manipulation attacks</li>
+                <li><strong>2022:</strong> Cryptocurrency exchange suffered validation bypass leading to unauthorized large transactions</li>
+            </ul>
+            
+            <h3>🛡️ The Secure Solution</h3>
+            <p><strong>Always validate on the server side:</strong></p>
+            <div class="console-commands">
+                <h4>❌ Wrong (Client-only):</h4>
+                <code>if (amount > 1000) showError("Amount too high");</code>
+                
+                <h4>✅ Correct (Server-side):</h4>
+                <code>if ($_POST['amount'] > 1000) return "Transfer denied";</code>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div id="resultPanel" class="result-panel">
+            <!-- Results will appear here -->
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/lab1.js') }}"></script>
+</body>
+</html>

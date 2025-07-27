@@ -1,0 +1,66 @@
+# Requirements for TCPRG4005 - Secure Programming Course
+# Chapter 1: Security Fundamentals
+
+# Security Analysis Tools
+bandit>=1.7.0          # Python security linter for static analysis
+safety>=2.3.0          # Checks Python dependencies for known vulnerabilities
+pylint>=2.15.0         # Code quality and security checks
+
+# Web Development & HTTP
+requests>=2.28.0       # HTTP library for SSL/TLS demonstrations
+urllib3>=1.26.0        # HTTP client library (used by requests)
+
+# Input Validation & Sanitization
+validators>=0.20.0     # Data validation library
+bleach>=5.0.0          # HTML sanitization to prevent XSS
+
+# Database & ORM
+SQLAlchemy>=1.4.0      # SQL toolkit and ORM for secure database operations
+
+# Cryptography (for future chapters)
+cryptography>=38.0.0   # Modern cryptographic library
+pycryptodome>=3.15.0   # Cryptographic library
+bcrypt>=4.0.0          # Password hashing for Chapter 3 authentication
+
+# Testing & Development
+pytest>=7.0.0          # Testing framework for security tests
+# pytest-security        # Security-focused pytest plugin
+
+# Network Security
+python-nmap>=0.7.1     # Network scanning (optional, for advanced demos)
+
+# Data Analysis (for log analysis)
+pandas>=1.5.0          # Data analysis for security log processing
+matplotlib>=3.6.0      # Plotting for security metrics visualization
+numpy>=1.24.0          # Numerical computing for mathematical analysis
+seaborn>=0.12.0        # Enhanced statistical visualization
+
+# Jupyter Notebook
+jupyter>=1.0.0         # Jupyter notebook environment
+notebook>=6.5.0        # Jupyter notebook server
+ipython>=8.0.0         # Enhanced Python shell
+
+# Additional Security Tools
+click>=8.0.0           # Command line interface creation
+pyyaml>=6.0            # YAML parsing (secure configuration)
+python-dotenv>=0.19.0  # Environment variable management
+
+# Note: Some packages like hashlib, sqlite3, os, sys, re, json, logging, 
+# subprocess, socket, ssl, tempfile, ast, shlex, datetime, collections,
+# time, random, string, math, statistics, dataclasses, typing, enum,
+# hmac, secrets are part of Python's standard library and don't need to be installed.
+
+# Installation Instructions:
+# 1. Create a virtual environment: python -m venv venv
+# 2. Activate it: 
+#    - Windows: venv\Scripts\activate
+#    - macOS/Linux: source venv/bin/activate
+# 3. Install packages: pip install -r requirements.txt
+# 4. Start Jupyter: jupyter notebook
+
+# Optional packages for enhanced functionality:
+# jupyter-contrib-nbextensions  # Additional notebook extensions
+# nbconvert                      # Convert notebooks to other formats
+
+# flask web
+flask
