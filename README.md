@@ -16,7 +16,11 @@ This course transforms developers into security-conscious programmers who build 
 - Apply threat modeling and security architecture principles
 - Build comprehensive logging and monitoring capabilities
 
-## 🗓️ Course Structure
+## � Getting Started
+
+**New to the course?** Check out our [Setup Guide](./setup.md) for installation instructions if you want to run materials locally. Otherwise, all content is accessible directly from this GitHub repository.
+
+## �🗓️ Course Structure
 
 **Duration**: 4 Days × 7 Hours = 28 Total Hours  
 **Format**: Interactive lectures, hands-on labs, and practical exercises
