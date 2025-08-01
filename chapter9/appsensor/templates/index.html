@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppSensor Flask Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the AppSensor Flask Example</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Sample Events</h2>
+            <ul>
+                <li>Event Type: Login Attempt - Status: Success</li>
+                <li>Event Type: Login Attempt - Status: Failure</li>
+                <li>Event Type: Data Access - Status: Unauthorized</li>
+                <li>Event Type: Configuration Change - Status: Success</li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 AppSensor Project</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

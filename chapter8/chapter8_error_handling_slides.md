@@ -1,9 +1,9 @@
 ---
-marp: true
+marp: false
 theme: gaia
-paginate: true
+paginate: false
 
----
+
 
 <style>
 section {
@@ -11,86 +11,7 @@ section {
 }
 </style>
   
-  section {
-    background: var(--color-background);
-    color: var(--color-foreground);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  h1 {
-    color: var(--color-highlight);
-    border-bottom: 2px solid var(--color-highlight);
-    padding-bottom: 10px;
-  }
-  
-  h2 {
-    color: var(--color-secondary);
-  }
-  
-  h3 {
-    color: var(--color-accent);
-  }
-  
-  code {
-    background: #2d2d2d;
-    color: var(--color-highlight);
-    padding: 2px 4px;
-    border-radius: 3px;
-  }
-  
-  pre {
-    background: #2d2d2d;
-    border-left: 4px solid var(--color-secondary);
-    padding: 15px;
-    border-radius: 5px;
-  }
-  
-  blockquote {
-    border-left: 4px solid var(--color-accent);
-    padding-left: 20px;
-    margin: 20px 0;
-    font-style: italic;
-    color: #cccccc;
-  }
-  
-  .highlight {
-    background: var(--color-warning);
-    color: black;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-weight: bold;
-  }
-  
-  .center-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin: 20px 0;
-  }
-
-  .danger {
-    color: var(--color-accent);
-    font-weight: bold;
-  }
-
-  .success {
-    color: var(--color-secondary);
-    font-weight: bold;
-  }
-
-  .warning {
-    color: var(--color-warning);
-    font-weight: bold;
-  }
+ 
 ---
 
 # Chapter 8: Error Handling and Exception Management

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Event Test Client</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="bi bi-shield-lock"></i> Security Monitor
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link active" href="/test-client">Test Client</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Security Event Test Client</h1>
+        <p class="lead">Use this form to generate test security events</p>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="card-title mb-0">Send Security Event</h3>
+            </div>
+            <div class="card-body">
+                <form id="eventForm" method="post" action="/api/events">
+                    <div class="mb-3">
+                        <label for="application" class="form-label">Application</label>
+                        <select class="form-select" id="application" name="application" required>
+                            <option value="">Select Application</option>
+                            <option th:each="app : ${applications}" th:value="${app}" th:text="${app}"></option>
+                            <option value="TestApp1">TestApp1</option>
+                            <option value="TestApp2">TestApp2</option>
+                            <option value="InsecureBank">InsecureBank</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Event Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option th:each="category : ${categories}" th:value="${category.key}" th:text="${category.value}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Send Event</button>
+                </form>
+                
+                <div id="result" class="alert mt-3" style="display: none;"></div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-info text-white">
+                <h3 class="card-title mb-0">Generate Multiple Events</h3>
+            </div>
+            <div class="card-body">
+                <form id="multipleEventsForm">
+                    <div class="mb-3">
+                        <label for="multiApp" class="form-label">Application</label>
+                        <select class="form-select" id="multiApp" required>
+                            <option value="">Select Application</option>
+                            <option th:each="app : ${applications}" th:value="${app}" th:text="${app}"></option>
+                            <option value="TestApp1">TestApp1</option>
+                            <option value="TestApp2">TestApp2</option>
+                            <option value="InsecureBank">InsecureBank</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="multiCategory" class="form-label">Event Category</label>
+                        <select class="form-select" id="multiCategory" required>
+                            <option value="">Select Category</option>
+                            <option th:each="category : ${categories}" th:value="${category.key}" th:text="${category.value}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="count" class="form-label">Number of Events</label>
+                        <input type="number" class="form-control" id="count" min="1" max="20" value="5">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="delay" class="form-label">Delay Between Events (ms)</label>
+                        <input type="number" class="form-control" id="delay" min="100" max="5000" value="500">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-info text-white">Generate Events</button>
+                </form>
+                
+                <div id="multiResult" class="alert mt-3" style="display: none;"></div>
+                <div id="progress" class="progress mt-3" style="display: none;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/webjars/jquery/3.6.4/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Single event form submission
+            $('#eventForm').submit(function(e) {
+                e.preventDefault();
+                
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/events',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        $('#result').removeClass('alert-danger').addClass('alert-success').text('Event sent successfully!').show();
+                        setTimeout(function() {
+                            $('#result').fadeOut();
+                        }, 3000);
+                    },
+                    error: function(xhr) {
+                        $('#result').removeClass('alert-success').addClass('alert-danger').text('Error: ' + xhr.responseText).show();
+                    }
+                });
+            });
+            
+            // Multiple events generation
+            $('#multipleEventsForm').submit(function(e) {
+                e.preventDefault();
+                
+                var app = $('#multiApp').val();
+                var category = $('#multiCategory').val();
+                var count = parseInt($('#count').val());
+                var delay = parseInt($('#delay').val());
+                
+                if (!app || !category || count < 1) {
+                    $('#multiResult').removeClass('alert-success').addClass('alert-danger').text('Please fill all fields correctly.').show();
+                    return;
+                }
+                
+                $('#multiResult').removeClass('alert-danger').addClass('alert-info').text('Generating ' + count + ' events...').show();
+                $('#progress').show();
+                $('.progress-bar').css('width', '0%');
+                
+                var sent = 0;
+                var intervalId = setInterval(function() {
+                    if (sent >= count) {
+                        clearInterval(intervalId);
+                        $('#multiResult').removeClass('alert-info').addClass('alert-success').text('All events sent successfully!');
+                        setTimeout(function() {
+                            $('#multiResult').fadeOut();
+                            $('#progress').fadeOut();
+                        }, 3000);
+                        return;
+                    }
+                    
+                    sent++;
+                    var progress = Math.round((sent / count) * 100);
+                    $('.progress-bar').css('width', progress + '%');
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '/api/events',
+                        data: {
+                            application: app,
+                            category: category,
+                            description: 'Test event #' + sent + ' of ' + count
+                        },
+                        error: function(xhr) {
+                            $('#multiResult').removeClass('alert-info').addClass('alert-danger').text('Error: ' + xhr.responseText);
+                            clearInterval(intervalId);
+                        }
+                    });
+                }, delay);
+            });
+        });
+    </script>
+</body>
+</html>
